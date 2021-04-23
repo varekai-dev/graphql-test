@@ -1,7 +1,7 @@
 const { AuthenticationError, UserInputError } = require('apollo-server')
 
 const Post = require('../../models/Post')
-const checkAuth = require('../../utils/check-auth')
+const checkAuth = require('../../util/check-auth')
 
 module.exports = {
 	Query: {
@@ -83,6 +83,11 @@ module.exports = {
 				await post.save()
 				return post
 			} else throw new UserInputError('Post not found')
+		}
+	},
+	Subscription: {
+		newPost: {
+			subscribe: (_, __, { pubsub }) => pubsub.asyncIterator('NEW_POST')
 		}
 	}
 }
